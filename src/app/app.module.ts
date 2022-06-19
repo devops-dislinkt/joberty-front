@@ -32,6 +32,7 @@ import { MatInputModule } from '@angular/material/input';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import { MyCompanyComponent } from './components/my-company/my-company.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     SignUpComponent,
     HomeComponent,
     NavigationBarComponent,
+    MyCompanyComponent,
   ],
   imports: [
     BrowserModule,
