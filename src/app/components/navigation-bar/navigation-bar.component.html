@@ -1,0 +1,31 @@
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div id="navbarDiv" class="container-fluid">
+            <a class="navbar-brand myFont" href="/"><i>Joberty</i></a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/posts">Posts</a>
+                    </li>
+                </ul>
+            </div>
+
+            <span style="flex: 1 1 auto"></span>
+            <a class="nav-link" routerLink="/edit-profile">
+                <button id="userBtn" mat-icon-button color="accent" class="dropdown" *ngIf="isLoggedIn()">
+                    <mat-icon>manage_accounts</mat-icon>
+                </button>
+            </a>
+
+            <span *ngIf="!isLoggedIn()">
+                <a routerLink="/login"><button mat-raised-button color="primary" id="loginBtn"
+                        class="mr-2">Login</button></a>
+                <a routerLink="/sign-up"><button mat-raised-button color="primary" id="signUpBtn">Sign Up</button></a>
+            </span>
+            <span *ngIf="isLoggedIn()">
+                <button mat-raised-button color="primary" id="loginBtn" class="mr-2" (click)="logout()">Logout</button>
+            </span>
+
+        </div>
+    </nav>
+</div>
