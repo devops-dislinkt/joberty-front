@@ -1,0 +1,43 @@
+<div class="container ml-auto mr-auto mt-5 w-25 border pt-4 pl-5 pr-5 pb-0 bg-white shadow-lg rounded">
+    <form [formGroup]="signupForm" (ngSubmit)="signUp()">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" formControlName="username" name="username" id="username"
+                placeholder="Enter username" required pattern="[a-z0-9]+">
+            <div *ngIf="signupForm.controls['username'].touched && signupForm.controls['username'].errors?.required"
+                class="mt-1 pl-1 inputError">
+                <small>Username is required.</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" formControlName="password" name="password" minlength="8"
+                id="password" placeholder="Enter password">
+            <div *ngIf="signupForm.controls['password'].touched && signupForm.controls['password'].errors?.minlength" class="mt-1 pl-1 inputError">
+                <small>Password must contain minimum 8 characters, at least one letter and one number.</small>
+            </div>
+            <div *ngIf="signupForm.controls['password'].touched && signupForm.controls['password'].errors?.required"
+                class="mt-1 pl-1 inputError">
+                <small>Password is required.</small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="passwordConfirm">Confirm Password</label>
+            <input type="password" class="form-control" formControlName="passConfirm" name="passwordConfirm"
+                id="passwordConfirm" placeholder="Confirm password" required>
+            <div *ngIf="signupForm.controls['passConfirm'].touched && signupForm.controls['passConfirm'].errors?.required"
+                class="mt-1 pl-1 inputError">
+            </div>
+            <div *ngIf="signupForm.controls['passConfirm'].errors?.mustMatch" class="mt-1 pl-1 inputError">
+                <small>Please make sure your passwords match.</small>
+            </div>
+        </div>
+        <div class="pt-3">
+            <button class="btn btn-block mt-3 btn-success" [disabled]="!signupForm.valid">Sign Up</button>
+        </div>
+    </form>
+    <div class="text-center pt-3">
+        <p>Already have an account? <a routerLink="/login" class="loginLink">Login here</a></p>
+    </div>
+</div>
