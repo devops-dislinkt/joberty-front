@@ -40,6 +40,7 @@ import { CompanyNavigationComponent } from './components/company-navigation/comp
 import { CommentsComponent } from './components/comments/comments.component';
 import { InterviewComponent } from './components/interview/interview.component';
 import { SalariesComponent } from './components/salaries/salaries.component';
+import { JobComponent } from './components/job/job.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { SalariesComponent } from './components/salaries/salaries.component';
     CommentsComponent,
     InterviewComponent,
     SalariesComponent,
+    JobComponent,
   ],
   imports: [
     BrowserModule,
