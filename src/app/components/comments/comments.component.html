@@ -1,0 +1,54 @@
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div id="navbarDiv" class="container-fluid">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/company/{{this.id}}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/comments/{{this.id}}">Comments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/salaries/{{this.id}}">Salaries</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/interview/{{this.id}}">Interview</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <form [formGroup]="commentForm" (ngSubmit)="submit()">
+        <div class="form-group">
+            <label for="rating">Rating:</label>
+            <input formControlName="rating" id="rating" type="text" class="form-control">
+            <div *ngIf="f.rating.touched && f.rating.invalid" class="text-danger">
+                <div *ngIf="f.rating.errors!.required">Rating is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="positive">Positive:</label>
+            <textarea style="resize: none;" formControlName="positive" id="positive" type="text" class="form-control" rows="2"></textarea>
+            <div *ngIf="f.positive.touched && f.positive.invalid" class="text-danger">
+                <div *ngIf="f.positive.errors!.required">Text is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="negative">Negative:</label>
+            <textarea style="resize: none;" formControlName="negative" id="negative" type="text" class="form-control" rows="2"></textarea>
+            <div *ngIf="f.negative.touched && f.negative.invalid" class="text-danger">
+                <div *ngIf="f.negative.errors!.required">Text is required.</div>
+            </div>
+        </div>
+        <div class="form-group float-right mt-3">
+            <button mat-raised-button color="primary" id="submit" [disabled]="!commentForm.valid" type="submit"
+                class="btn-block">Submit</button>
+        </div>
+    </form>
+
+    <div *ngFor="let c of comments" id="commentDiv">
+        <div id="content">Rating: {{c.rating}}</div>
+        <div id="content">Positive: {{c.positive}}</div>
+        <div id="content">Negative: {{c.negative}}</div>
+    </div>
+</div>

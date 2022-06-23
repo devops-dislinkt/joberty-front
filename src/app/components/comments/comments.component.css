@@ -1,0 +1,11 @@
+#commentDiv {
+    width: 100%; 
+    background-color: cornsilk; 
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+#content {
+    margin-top: 5px; 
+    margin-bottom: 5px;
+}

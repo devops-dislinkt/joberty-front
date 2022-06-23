@@ -33,6 +33,13 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { MyCompanyComponent } from './components/my-company/my-company.component';
+import { CompaniesComponent } from './components/companies/companies.component';
+import { CompanyItemComponent } from './components/company-item/company-item.component';
+import { CompanyComponent } from './components/company/company.component';
+import { CompanyNavigationComponent } from './components/company-navigation/company-navigation.component';
+import { CommentsComponent } from './components/comments/comments.component';
+import { InterviewComponent } from './components/interview/interview.component';
+import { SalariesComponent } from './components/salaries/salaries.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +49,13 @@ import { MyCompanyComponent } from './components/my-company/my-company.component
     HomeComponent,
     NavigationBarComponent,
     MyCompanyComponent,
+    CompaniesComponent,
+    CompanyItemComponent,
+    CompanyComponent,
+    CompanyNavigationComponent,
+    CommentsComponent,
+    InterviewComponent,
+    SalariesComponent,
   ],
   imports: [
     BrowserModule,

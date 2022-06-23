@@ -1,2 +1,45 @@
-<p>my-company works!</p>
+<div class="col-md-8 ml-auto mr-auto pt-1 mt-0">
+    <form [formGroup]="companyForm" (ngSubmit)="submit()">
+        <div class="form-group">
+            <label for="name">Company name:</label>
+            <input formControlName="name" id="name" type="text" class="form-control">
+            <div *ngIf="f.name.touched && f.name.invalid" class="text-danger">
+                <div *ngIf="f.name.errors!.required">Company name is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input formControlName="location" id="location" type="text" class="form-control">
+            <div *ngIf="f.location.touched && f.location.invalid" class="text-danger">
+                <div *ngIf="f.location.errors!.required">Location is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input formControlName="email" id="email" type="text" class="form-control">
+            <div *ngIf="f.email.touched && f.email.invalid" class="text-danger">
+                <div *ngIf="f.email.errors!.required">Email is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="website">Website:</label>
+            <input formControlName="website" id="website" type="text" class="form-control">
+            <div *ngIf="f.website.touched && f.website.invalid" class="text-danger">
+                <div *ngIf="f.website.errors!.required">Website is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea style="resize: none;" formControlName="description" id="description" type="text" class="form-control" rows="5"></textarea>
+            <div *ngIf="f.description.touched && f.description.invalid" class="text-danger">
+                <div *ngIf="f.description.errors!.required">Description is required.</div>
+            </div>
+        </div>
+
+        <div class="form-group float-right mt-3">
+            <button mat-raised-button color="primary" id="submit" [disabled]="!companyForm.valid" type="submit"
+                class="btn-block">Submit</button>
+        </div>
+    </form>
+</div>
 <button mat-flat-button color="accent" (click)="create()"> Test create company</button>

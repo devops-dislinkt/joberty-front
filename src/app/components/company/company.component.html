@@ -1,0 +1,28 @@
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div id="navbarDiv" class="container-fluid">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/company/{{this.id}}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/comments/{{this.id}}">Comments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/salaries/{{this.id}}">Salaries</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/interview/{{this.id}}">Interview</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div *ngIf="company != undefined">
+        Name:  {{this.company.name}} <br>
+        Website:  {{this.company.website}}<br>
+        Email:  {{this.company.email}}<br>
+        Location:  {{this.company.location}}<br>
+        Description:  {{this.company.description}}<br>
+        
+    </div>
+</div>
