@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Comment } from '../model/comment.model';
 import { Company } from '../model/company.model';
 import { Interview } from '../model/interview.model';
+import { Job } from '../model/job.model';
 import { Salary } from '../model/salary.model';
 import { UserService } from './user.service';
 
@@ -93,6 +94,20 @@ export class MyCompanyService {
       const headers = new HttpHeaders({'authorization': `Bearer ${this.userService.getToken()}`})
       const response = await this.http.post<Company>(`${this.path}/company/${company_id}/salary`, salary, {headers}).toPromise()
       this.openSuccessSnackBar(`successfully created salary.`)
+      return response
+    }
+    catch (error) {
+      if (error instanceof HttpErrorResponse) this.openFailSnackBar(error.error)
+      else this.openFailSnackBar()
+    }
+  }
+
+  async createJob(company_id: string, job: Job) {
+    try {
+      console.log("create job = ", job, " for company id = ", company_id);
+      const headers = new HttpHeaders({'authorization': `Bearer ${this.userService.getToken()}`})
+      const response = await this.http.post<Company>(`${this.path}/company/${company_id}/job`, job, {headers}).toPromise()
+      this.openSuccessSnackBar(`successfully created job.`)
       return response
     }
     catch (error) {

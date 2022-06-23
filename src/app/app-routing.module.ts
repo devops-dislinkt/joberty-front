@@ -9,6 +9,7 @@ import { CompanyComponent } from './components/company/company.component';
 import { InterviewComponent } from './components/interview/interview.component';
 import { SalariesComponent } from './components/salaries/salaries.component';
 import { CommentsComponent } from './components/comments/comments.component';
+import { JobComponent } from './components/job/job.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
       {path: 'interview/:id', component: InterviewComponent},
       {path: 'salaries/:id', component: SalariesComponent},
       {path: 'comments/:id', component: CommentsComponent},
+      {path: 'jobs/:id', component: JobComponent},
     ]
   },
 ];
