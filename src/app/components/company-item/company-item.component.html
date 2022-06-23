@@ -1,0 +1,20 @@
+<div class="cardHeight mt-4">
+    <div class="card shadow h-100 clickable">
+      <div (click)="showDetails()">
+        <img class="card-img-top" style="height: 150px;" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg">
+        <div class="card-body">
+          <div style="height: 50px;">
+            <h3 class="float-left" title="Title">{{company.name}}</h3>
+          </div>
+          <p class="card-text" title="Description"><small>{{company.description}}</small></p>
+        </div>
+      </div>
+      <div class="pl-2">
+        <div class="float-right">
+          <button mat-mini-fab color="primary" class="mr-2 mb-2" (click)=showDetails() style="outline: none">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

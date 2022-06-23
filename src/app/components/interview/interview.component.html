@@ -1,0 +1,58 @@
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div id="navbarDiv" class="container-fluid">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/company/{{this.id}}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/comments/{{this.id}}">Comments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/salaries/{{this.id}}">Salaries</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/interview/{{this.id}}">Interview</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/jobs/{{this.id}}">Jobs</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <form [formGroup]="interviewForm" (ngSubmit)="submit()">
+        <div class="form-group">
+            <label for="rating">Rating:</label>
+            <input formControlName="rating" id="rating" type="text" class="form-control">
+            <div *ngIf="f.rating.touched && f.rating.invalid" class="text-danger">
+                <div *ngIf="f.rating.errors!.required">Rating is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="hr">HR interview:</label>
+            <textarea style="resize: none;" formControlName="hr" id="hr" type="text" class="form-control" rows="2"></textarea>
+            <div *ngIf="f.hr.touched && f.hr.invalid" class="text-danger">
+                <div *ngIf="f.hr.errors!.required">Text is required.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="technical">Technical interview:</label>
+            <textarea style="resize: none;" formControlName="technical" id="technical" type="text" class="form-control" rows="2"></textarea>
+            <div *ngIf="f.technical.touched && f.technical.invalid" class="text-danger">
+                <div *ngIf="f.technical.errors!.required">Text is required.</div>
+            </div>
+        </div>
+        <div class="form-group float-right mt-3">
+            <button mat-raised-button color="primary" id="submit" [disabled]="!interviewForm.valid" type="submit"
+                class="btn-block">Submit</button>
+        </div>
+    </form>
+
+    <div *ngFor="let c of interview" id="interviewDiv">
+        <div id="content">Rating: {{c.rating}}</div>
+        <div id="content">HR interview: {{c.hr}}</div>
+        <div id="content">Technical interview: {{c.yechnical}}</div>
+    </div>
+
+</div>

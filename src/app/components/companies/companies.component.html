@@ -1,0 +1,7 @@
+<div class="row col-md-12 w-100 pt-1 pl-auto pr-auto">
+    <app-company-item class="col-md-3" *ngFor="let c of getCompanies()" [company]="c">
+    </app-company-item>
+    <div *ngIf="getCompanies().length === 0">
+        <h4>No companies in the database</h4>
+    </div>
+</div>
