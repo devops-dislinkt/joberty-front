@@ -47,11 +47,39 @@ export class MyCompanyService {
     }
   }
 
+  async approveCompany(approveObj: any) {
+    try {
+      console.log("approveCompany = ", approveObj);
+
+      const headers = new HttpHeaders({'authorization': `Bearer ${this.userService.getToken()}`})
+      const response = await this.http.post<any>(`${this.path}/company/resolve-registration`, approveObj, {headers}).toPromise()
+      this.openSuccessSnackBar(`successfully approved company.`)
+      return response
+    }
+    catch (error) {
+      if (error instanceof HttpErrorResponse) this.openFailSnackBar(error.error)
+      else this.openFailSnackBar()
+    }
+  }
+
   async createCompany(company: Company) {
     try {
       const headers = new HttpHeaders({'authorization': `Bearer ${this.userService.getToken()}`})
       const response = await this.http.post<Company>(`${this.path}/company`, company, {headers}).toPromise()
-      this.openSuccessSnackBar(`successfully created user ${company.name}. Please login to continue.`)
+      this.openSuccessSnackBar(`successfully created user ${company.name}.`)
+      return response
+    }
+    catch (error) {
+      if (error instanceof HttpErrorResponse) this.openFailSnackBar(error.error)
+      else this.openFailSnackBar()
+    }
+  }
+
+  async updateCompany(company: Company, company_id: any) {
+    try {
+      const headers = new HttpHeaders({'authorization': `Bearer ${this.userService.getToken()}`})
+      const response = await this.http.put<Company>(`${this.path}/company/${company_id}`, company, {headers}).toPromise()
+      this.openSuccessSnackBar(`successfully created user ${company.name}.`)
       return response
     }
     catch (error) {
@@ -108,6 +136,18 @@ export class MyCompanyService {
       const headers = new HttpHeaders({'authorization': `Bearer ${this.userService.getToken()}`})
       const response = await this.http.post<Company>(`${this.path}/company/${company_id}/job`, job, {headers}).toPromise()
       this.openSuccessSnackBar(`successfully created job.`)
+      return response
+    }
+    catch (error) {
+      if (error instanceof HttpErrorResponse) this.openFailSnackBar(error.error)
+      else this.openFailSnackBar()
+    }
+  }
+
+  async getJobDetails(id: any) {
+    try {
+      const headers = new HttpHeaders({'authorization': `Bearer ${this.userService.getToken()}`})
+      const response = await this.http.get<any>(`${this.path}/get-job-details/${id}`, {headers}).toPromise()
       return response
     }
     catch (error) {
