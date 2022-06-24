@@ -48,6 +48,18 @@ export class UserService {
     }
   }
 
+  async getUser(username: string) {
+    try {
+      const headers = new HttpHeaders({'authorization': `Bearer ${this.getToken()}`})
+      const response = await this.http.get<any>(`${this.path}/get-user/${username}`, {headers}).toPromise()
+      return response
+    }
+    catch (error) {
+      if (error instanceof HttpErrorResponse) this.openFailSnackBar(error.error)
+      else this.openFailSnackBar()
+    }
+  }
+
   logout(): void {
     localStorage.removeItem("token")
     localStorage.removeItem('role')
@@ -76,6 +88,12 @@ export class UserService {
   isUser(): boolean {
     let authority = this.getRole();
     let role = "user";
+    return authority === role;
+  }
+
+  isCompanyOwner(): boolean {
+    let authority = this.getRole();
+    let role = "company_owner";
     return authority === role;
   }
 

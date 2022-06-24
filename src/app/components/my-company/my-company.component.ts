@@ -12,19 +12,50 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class MyCompanyComponent implements OnInit {
 
+  company: Company;
+  userId: number;
+
   companyForm = new FormGroup({
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
-    location: new FormControl('', [Validators.required]),
-    website: new FormControl('', [Validators.required]),
+    location: new FormControl('', Validators.required),
+    website: new FormControl('', Validators.required),
   });
 
   constructor(private companyService: MyCompanyService,
     private userService: UserService) { }
 
   ngOnInit() {
+    if(this.userService.isLoggedIn()){
+      this.getUser(this.userService.getUsername())  
+    }
+  }
 
+  async getUser(username: string) {
+    let user = await this.userService.getUser(username);
+    this.userId = user.id;
+    this.company = user.company;
+    console.log("company = ", this.company);
+    if (this.isCompanyOwner()) {
+      this.companyForm.get("name").setValue(this.company.name);
+      this.companyForm.get("location").setValue(this.company.location);
+      this.companyForm.get("website").setValue(this.company.website);
+      this.companyForm.get("description").setValue(this.company.description);
+      this.companyForm.get("email").setValue(this.company.email);
+    }
+  }
+
+  isUser(): boolean {
+    return this.userService.isUser();
+  }
+
+  isUserAdmin(): boolean {
+    return this.userService.isAdmin();
+  }
+
+  isCompanyOwner(): boolean {
+    return this.userService.isCompanyOwner();
   }
 
   async submit() {
@@ -32,15 +63,22 @@ export class MyCompanyComponent implements OnInit {
     //@ts-ignore
     let company: Company = {
       //'id': 15,
-      'user_id': 1,
-      'approved': true,
+      'user_id': this.userId,
+      'approved': false,
       'name': this.companyForm.value.name,
       'email': this.companyForm.value.email,
       'location': this.companyForm.value.location,
       'website': this.companyForm.value.website,
       'description': this.companyForm.value.description,
     }
-    await this.companyService.createCompany(company)
+    if (this.isCompanyOwner()) {
+      console.log("update = ", company);
+      company['approved'] = true;
+      await this.companyService.updateCompany(company, this.company.id)
+    } else {
+      console.log("create = ", company);
+      await this.companyService.createCompany(company)
+    }
   }
 
   get f() {
@@ -70,8 +108,14 @@ export class MyCompanyComponent implements OnInit {
       'website': 'endava.com',
       'description': 'Endava je tehnološka kompanija, sa preko 20 godina iskustva u radu sa nekim od vodećih svetskih kompanija.',
     }
-    await this.companyService.createCompany(company)
-    await this.companyService.createCompany(company2)
+    //await this.companyService.createCompany(company)
+    //await this.companyService.createCompany(company2)
+
+    const admin: User = new User();
+    admin.username = "admin";
+    admin.password = "123456789";
+    admin.role = 'admin'
+    await this.userService.signUp(admin);
 
   }
 }
