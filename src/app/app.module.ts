@@ -41,6 +41,7 @@ import { CommentsComponent } from './components/comments/comments.component';
 import { InterviewComponent } from './components/interview/interview.component';
 import { SalariesComponent } from './components/salaries/salaries.component';
 import { JobComponent } from './components/job/job.component';
+import { JobDetailsComponent } from './components/job-details/job-details.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { JobComponent } from './components/job/job.component';
     InterviewComponent,
     SalariesComponent,
     JobComponent,
+    JobDetailsComponent,
   ],
   imports: [
     BrowserModule,

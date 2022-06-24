@@ -10,6 +10,11 @@
         </div>
       </div>
       <div class="pl-2">
+        <div class="float-right" *ngIf="this.company.approved == false && this.isUserAdmin()">
+          <button mat-mini-fab color="primary" class="mr-2 mb-2" (click)=approve() style="outline: none">
+            <mat-icon>check</mat-icon>
+          </button>
+        </div>
         <div class="float-right">
           <button mat-mini-fab color="primary" class="mr-2 mb-2" (click)=showDetails() style="outline: none">
             <mat-icon>edit</mat-icon>
