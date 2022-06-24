@@ -8,13 +8,15 @@ import { Interview } from '../model/interview.model';
 import { Job } from '../model/job.model';
 import { Salary } from '../model/salary.model';
 import { UserService } from './user.service';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class MyCompanyService {
 
-  path = 'http://localhost:8060/api';
+  path = environment.apiUrl;
 
   constructor(
     private http: HttpClient,

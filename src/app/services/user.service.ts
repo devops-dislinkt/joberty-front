@@ -5,13 +5,14 @@ import { User } from '../model/user.model';
 import {Router} from "@angular/router";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  path = 'http://localhost:8060/api';
+  path = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
