@@ -12,67 +12,31 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        python: [3.10.0]
-        poetry-version: [1.1.12]
     steps:
     #----------------------------------------------
-    #       check-out repo and set-up python
+    #       check-out repo and set-up npm
     #----------------------------------------------
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Set up python 
-        uses: actions/setup-python@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v1
         with:
-          python-version: ${{ matrix.python }}
-    # #----------------------------------------------
-    # #       check commit message
-    # #----------------------------------------------
-    #   - name : Check commit messages
-    #     uses: wagoid/commitlint-github-action@v4
-    #----------------------------------------------
-    #     load cached poetry if cache exists
-    #----------------------------------------------
-      - name: Load cached Poetry installation
-        id: cached-poetry-installation
-        uses: actions/cache@v2
-        with:
-          path: ~/.local 
-          key: poetry-1
-    #----------------------------------------------
-    # install & configure poetry if cache does not exist
-    #----------------------------------------------
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ matrix.poetry-version }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-        if: steps.cached-poetry-installation.outputs.cache-hit != 'true'
-    #----------------------------------------------
-    #  install dependencies if cache does not exist
-    #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: venv1-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            venv1-${{ runner.os }}-
-      - name: Install dependencies
-        run: poetry install
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-    #----------------------------------------------
-    #  check lint with black lib
-    #----------------------------------------------
-      # - name: Check lint with Black
-      #   uses: psf/black@stable
-      #   with:
-      #     options: "--check --verbose"
-      #     src: "."
-      #     version: "22.3.0"
+            ${{ runner.os }}-node-
+            
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1.4.2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+ 
     #----------------------------------------------
     #    get next version
     #----------------------------------------------
@@ -86,137 +50,15 @@ jobs:
     #----------------------------------------------
     #     build project and upload
     #----------------------------------------------
-      - name: Build
-        run: |
-            poetry version ${{ steps.version.outputs.VERSION }}
-            poetry build
-      - name: Upload build
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v3
-        with:
-            name: build-${{ steps.version.outputs.VERSION }}
-            path: dist/*.tar.gz
+      - name: Build Application
+        run: npm run ci:build
 
     #----------------------------------------------
     #     create release 
     #----------------------------------------------
       - name: Create a Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev  '
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #----------------------------------------------
-    #       publish docker image to DockerHub
-    #----------------------------------------------    
-      - name: Set up QEMU
-        if: github.event_name == 'push'
-        uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
-        if: github.event_name == 'push'
-        uses: docker/setup-buildx-action@v1
-      - name: Login to DockerHub
-        if: github.event_name == 'push'
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASS }}
-      - name: Build and push
-        if: github.event_name == 'push'
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/joberty:${{ steps.version.outputs.VERSION }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/joberty:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/joberty:buildcache,mode=max
-          
-
-  terraform:
-    name: 'Terraform'
-    # needs: build
-    runs-on: ubuntu-latest
-    env:
-      HEROKU_API_KEY : ${{secrets.HEROKU_API_KEY}}
-      HEROKU_APP_NAME: ${{secrets.HEROKU_APP_NAME}}
-      HEROKU_EMAIL: ${{secrets.HEROKU_EMAIL}}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN_TEST_ENV }}
-    
-      - name: Terraform Format
-        id: fmt
-        working-directory: ./terraform
-        run: terraform fmt
-
-      - name: Terraform Init
-        id: init
-        working-directory: ./terraform
-        run: terraform init
-
-      - name: import 
-        env:
-          HEROKU_API_KEY : ${{secrets.HEROKU_API_KEY}}
-          HEROKU_APP_NAME: ${{secrets.HEROKU_APP_NAME}}
-          HEROKU_EMAIL: ${{secrets.HEROKU_EMAIL}}
-        working-directory: ./terraform
-        run: terraform import heroku_app.servers servers-terraform
-
-
-      - name: Terraform Validate
-        id:  validate
-        working-directory: ./terraform
-        run: terraform validate -no-color
-
-      - name: Terraform Plan
-        id: plan
-        if: github.event_name == 'pull_request'
-        working-directory: ./terraform
-        run: terraform plan -no-color -input=false
-        continue-on-error: true
-
-      - name: Update Pull Request
-        uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-        with:
-          script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ️⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-      
-            <details><summary>Show Plan</summary>
-      
-            \`\`\`\n
-            ${process.env.PLAN}
-            \`\`\`
-      
-            </details>
-      
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-      
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
-
-      - name: Terraform Apply
-        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        working-directory: ./terraform
-        env:
-          HEROKU_API_KEY : ${{secrets.HEROKU_API_KEY}}
-          HEROKU_APP_NAME: ${{secrets.HEROKU_APP_NAME}}
-          HEROKU_EMAIL: ${{secrets.HEROKU_EMAIL}}
-        run: terraform apply -auto-approve -input=false
+   
