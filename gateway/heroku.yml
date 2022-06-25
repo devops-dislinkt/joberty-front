@@ -1,0 +1,6 @@
+build:
+  docker:
+    web: Dockerfile
+  config:
+    API_URL: "  apiUrl:  'https://servers-terraform-prod.herokuapp.com/api/server'"
+
